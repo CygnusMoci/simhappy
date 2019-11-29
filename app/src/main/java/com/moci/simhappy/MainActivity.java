@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int rNum;
 
     private GridView gridView; // 抽卡结果布局
+    private ImageView card_view; // 显示全图
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +71,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cb_Safe_ten.setOnCheckedChangeListener(this);
         cb_Safe_fifty.setOnCheckedChangeListener(this);
 
+
+        // test
+        card_view = findViewById(R.id.card_view);
+        card_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                card_view.setVisibility(View.INVISIBLE);
+                card_view.setClickable(false);
+
+                btn_solo.setVisibility(View.VISIBLE);
+                btn_tenfold.setVisibility(View.VISIBLE);
+            }
+        });
+
         gridView = findViewById(R.id.result);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setAdapter(new ImageAdapter(this,card_view,btn_solo,btn_tenfold));
+
+
 
     }
 

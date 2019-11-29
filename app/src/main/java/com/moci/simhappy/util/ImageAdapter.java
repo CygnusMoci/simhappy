@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -12,8 +13,14 @@ import com.moci.simhappy.R;
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    public ImageAdapter(Context c) {
+    private ImageView imageView2;
+    private Button btn1;
+    private Button btn2;
+    public ImageAdapter(Context c,ImageView iv, Button b1, Button b2) {
         mContext = c;
+        imageView2 = iv;
+        btn1 = b1;
+        btn2 = b2;
     }
     /*获取当前图片数量*/
     @Override
@@ -31,8 +38,8 @@ public class ImageAdapter extends BaseAdapter {
         return id;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ImageView imageView;
         if (convertView == null) {
             /*实例化ImageView对象*/
             imageView = new ImageView(mContext);
@@ -48,6 +55,20 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         imageView.setImageResource(mThumbIds[position]);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageView2.bringToFront();
+                imageView2.setVisibility(View.VISIBLE);
+                imageView2.setClickable(true);
+                imageView2.setImageResource(img[position]);
+
+                btn1.setVisibility(View.INVISIBLE);
+                btn2.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
         return imageView;
     }
     // references to our images
@@ -56,5 +77,11 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.r, R.drawable.r, R.drawable.r,
             R.drawable.r, R.drawable.r, R.drawable.r,
             R.drawable.sr, R.drawable.ssr
+    };
+
+    private Integer[] img = {
+            R.drawable.r_img, R.drawable.r_img,R.drawable.r_img,R.drawable.r_img,
+            R.drawable.r_img,R.drawable.r_img,R.drawable.r_img,R.drawable.r_img,
+            R.drawable.sr_img,R.drawable.ssr_img
     };
 }

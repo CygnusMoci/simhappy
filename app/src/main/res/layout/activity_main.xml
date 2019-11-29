@@ -100,7 +100,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:numColumns="4">
-
     </GridView>
     <Button
         android:id="@+id/btn_solo"
@@ -204,4 +203,17 @@
             android:textSize="18dp"
             android:text=" 0 "/>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/card_view"
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:background="#123"
+        android:visibility="invisible"
+        android:clickable="false"
+        android:layout_alignParentTop="true"
+        app:layout_constraintTop_toBottomOf="@id/layout_prtext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    </ImageView>
 </androidx.constraintlayout.widget.ConstraintLayout>
