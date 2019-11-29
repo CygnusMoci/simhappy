@@ -6,14 +6,202 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
+    <LinearLayout
+        android:id="@+id/layout_pr"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:paddingTop="10dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/ed_P_ssr"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:hint="SSR"/>
+
+        <EditText
+            android:id="@+id/ed_P_sr"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:hint="SR"/>
+
+        <EditText
+            android:id="@+id/ed_P_r"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:hint="R"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_prtext"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:paddingTop="10dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toTopOf="@id/layout_pr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:text="SSR概率"/>
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:text="SR概率"/>
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:text="R概率"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/text1000"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="10dp"
+        android:text="/1000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btn_setPR"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/button"
-        android:text="十连抽"
+        android:text="set"
+        app:layout_constraintTop_toBottomOf="@+id/text1000"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+    <GridView
+        android:id="@+id/result"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_prtext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:numColumns="4">
+
+    </GridView>
+    <Button
+        android:id="@+id/btn_solo"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button"
+        android:text="单抽"
+        android:layout_marginLeft="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btn_tenfold"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button"
+        android:text="十连抽"
+        android:layout_marginRight="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/cb_Safe_ten"
+        android:layout_width="150dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginRight="160dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/result"
+        android:text="十连SR保底"/>
+    <CheckBox
+        android:id="@+id/cb_Safe_fifty"
+        android:layout_width="150dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="160dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/result"
+        android:text="五十连SSR保底"/>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="140dp"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="18dp"
+            android:text="SSR : "/>
+        <TextView
+            android:id="@+id/ssrNum"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:textSize="18dp"
+            android:text=" 0 "/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="180dp"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="18dp"
+            android:text="SR : "/>
+        <TextView
+            android:id="@+id/srNum"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:textSize="18dp"
+            android:text=" 0 "/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="220dp"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="18dp"
+            android:text="R : "/>
+        <TextView
+            android:id="@+id/rNum"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:textSize="18dp"
+            android:text=" 0 "/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
