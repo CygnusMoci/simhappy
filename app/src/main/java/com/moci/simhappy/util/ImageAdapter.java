@@ -16,16 +16,18 @@ public class ImageAdapter extends BaseAdapter {
     private ImageView imageView2;
     private Button btn1;
     private Button btn2;
-    public ImageAdapter(Context c,ImageView iv, Button b1, Button b2) {
+    private Integer[] icon;
+    public ImageAdapter(Context c,ImageView iv, Button b1, Button b2, Integer[] i) {
         mContext = c;
         imageView2 = iv;
         btn1 = b1;
         btn2 = b2;
+        icon = i;
     }
     /*获取当前图片数量*/
     @Override
     public int getCount() {
-        return mThumbIds.length;
+        return icon.length;
     }
     /* 根据需要position获得在GridView中的对象*/
     @Override
@@ -54,34 +56,23 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(mThumbIds[position]);
+        imageView.setImageResource(icon[position]);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageView2.bringToFront();
                 imageView2.setVisibility(View.VISIBLE);
                 imageView2.setClickable(true);
-                imageView2.setImageResource(img[position]);
+                imageView2.setImageResource(icon_img(icon[position]));
 
                 btn1.setVisibility(View.INVISIBLE);
                 btn2.setVisibility(View.INVISIBLE);
             }
         });
-
-
         return imageView;
     }
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.r, R.drawable.r,
-            R.drawable.r, R.drawable.r, R.drawable.r,
-            R.drawable.r, R.drawable.r, R.drawable.r,
-            R.drawable.sr, R.drawable.ssr
-    };
 
-    private Integer[] img = {
-            R.drawable.r_img, R.drawable.r_img,R.drawable.r_img,R.drawable.r_img,
-            R.drawable.r_img,R.drawable.r_img,R.drawable.r_img,R.drawable.r_img,
-            R.drawable.sr_img,R.drawable.ssr_img
-    };
+    private Integer icon_img(Integer icon){
+        return CardType.getImg(icon);
+    }
 }

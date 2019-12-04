@@ -158,10 +158,21 @@
             android:text="SSR : "/>
         <TextView
             android:id="@+id/ssrNum"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:textSize="18dp"
             android:text=" 0 "/>
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:textSize="12dp"
+            android:text="SSR保底计数"/>
+        <TextView
+            android:id="@+id/safe_fifity"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textSize="14dp"
+            android:text=" 50 "/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="300dp"
@@ -178,10 +189,17 @@
             android:text="SR : "/>
         <TextView
             android:id="@+id/srNum"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:textSize="18dp"
             android:text=" 0 "/>
+        <Button
+            android:id="@+id/clear"
+            android:background="@drawable/button"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:text="clear"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="300dp"
@@ -198,7 +216,7 @@
             android:text="R : "/>
         <TextView
             android:id="@+id/rNum"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:textSize="18dp"
             android:text=" 0 "/>
