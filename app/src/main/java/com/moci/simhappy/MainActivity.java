@@ -25,25 +25,19 @@ import com.moci.simhappy.util.CardType;
 import com.moci.simhappy.util.Constant;
 import com.moci.simhappy.util.ImageAdapter;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener , CompoundButton.OnCheckedChangeListener{
-
-    private EditText ed_P_ssr; // 自设概率
-    private EditText ed_P_sr;
-    private EditText ed_P_r;
-
-    private Button btn_setPR;  // 设置概率
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btn_solo; // 单抽
     private Button btn_tenfold; // 十连
 
-    private CheckBox cb_Safe_ten; // 开启十连SR保底
-    private CheckBox cb_Safe_fifty; // 开启五十连SSR保底
-
     private TextView safe_fifity; // 保底计数器
     private int sum_Safe_fifty;
+    private TextView safe_newhun;
+    private int sum_Safe_newhun;
 
     private TextView ssrNum; // 抽卡计数
     private TextView srNum;
@@ -58,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GridView gridView; // 抽卡结果布局
     private ImageView card_view; // 显示全图
 
+    private Random mRandom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,25 +67,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sumSR = 0;
         sumSSR = 0;
         sum_Safe_fifty = 0;
+        sum_Safe_newhun = 0;
+        mRandom = new Random();
     }
 
     private void initWidget(){
-        ed_P_ssr = findViewById(R.id.ed_P_ssr);
-        ed_P_sr = findViewById(R.id.ed_P_sr);
-        ed_P_r = findViewById(R.id.ed_P_r);
-
-        btn_setPR = findViewById(R.id.btn_setPR);
         btn_solo = findViewById(R.id.btn_solo);
         btn_tenfold = findViewById(R.id.btn_tenfold);
-        btn_setPR.setOnClickListener(this);
         btn_solo.setOnClickListener(this);
         btn_tenfold.setOnClickListener(this);
-
-        cb_Safe_ten = findViewById(R.id.cb_Safe_ten);
-        cb_Safe_fifty = findViewById(R.id.cb_Safe_fifty);
-        cb_Safe_ten.setOnCheckedChangeListener(this);
-        cb_Safe_fifty.setOnCheckedChangeListener(this);
-
 
         // test
         card_view = findViewById(R.id.card_view);
@@ -114,52 +99,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ssrNum = findViewById(R.id.ssrNum);
 
         safe_fifity = findViewById(R.id.safe_fifity);
+        safe_newhun = findViewById(R.id.safe_newhun);
         clear = findViewById(R.id.clear);
         clear.setOnClickListener(this);
     }
 
-    private void setPR(){
-        if(ed_P_ssr.getText().toString().length() == 0 ||
-                ed_P_sr.getText().toString().length() == 0 ||
-                ed_P_r.getText().toString().length() == 0){
-            Toast.makeText(this,"存在概率为空",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Pattern pattern = Pattern.compile("-?[0-9]+\\.?[0-9]*");
-        String ssrStr = ed_P_ssr.getText().toString();
-        String srStr = ed_P_sr.getText().toString();
-        String rStr = ed_P_r.getText().toString();
-        if(pattern.matcher(ssrStr).matches() &&
-                pattern.matcher(ssrStr).matches() &&
-                pattern.matcher(ssrStr).matches() ){
-            int P_SSR = Integer.parseInt(ssrStr);
-            int P_SR = Integer.parseInt(srStr);
-            int P_R = Integer.parseInt(rStr);
-            SimpleGetManager.getInstance().setPR(P_SSR,P_SR,P_R);
-            Toast.makeText(this,"设置概率成功！",Toast.LENGTH_SHORT).show();
-            clear();
-            return;
-        }
-        Toast.makeText(this,"概率不为数字",Toast.LENGTH_SHORT).show();
-        return;
-    }
     private void soloGet(){
         CardType type = SimpleGetManager.getInstance().getType();
+        if(type.equals(CardType.valueOf("SSR_sp"))){
+            Constant.isNewHun = true;
+        }else {
+            sum_Safe_newhun++;
+        }
         updateSum(type);
         Integer[] icon = new Integer[1];
-        if(!type.equals(CardType.valueOf("SSR")) ){
-            sum_Safe_fifty++;
-        }else {
+        if(type.equals(CardType.valueOf("SSR")) || type.equals(CardType.valueOf("SSR_sp"))){
             sum_Safe_fifty = 0;
+        }else {
+            sum_Safe_fifty++;
         }
         icon[0] = type.getIcon();
-        if(Constant.isFifty && sum_Safe_fifty > 50){
-            icon[0] = R.drawable.ssr;
+
+        boolean ishun = false;
+        if(!Constant.isNewHun && sum_Safe_newhun >= 100){
+            Constant.isNewHun = true;
+            ishun = true;
+            icon[0] = R.drawable.ssr1;
+            sum_Safe_fifty = 0;
             sumSSR++;
+        }
+
+        if(Constant.isFifty && sum_Safe_fifty >= 50){
+            icon[0] = R.drawable.ssr2;
+            int num = mRandom.nextInt(Constant.DEFAULT_SP_SSR + Constant.DEFAULT_SSR);
+            if(num < Constant.DEFAULT_SP_SSR) {
+                Constant.isNewHun = true;
+                icon[0] = R.drawable.ssr1;
+            }
+            if(!ishun)sumSSR++;
             sum_Safe_fifty = 0;
         }
-        updateSum(null);
-        gridView.setAdapter(new ImageAdapter(this,card_view,btn_solo,btn_tenfold,icon));
+
+        setResult(icon);
     }
 
     private void tenfoldGet(){
@@ -168,52 +149,91 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int tempTen = 0; // 十连保底计数
         for (int i = 0; i < 10; i++) {
             CardType type = SimpleGetManager.getInstance().getType();
+
+            if(type.equals(CardType.valueOf("SSR_sp"))){
+                Constant.isNewHun = true;
+            }else {
+                sum_Safe_newhun++;
+            }
+
             if(type.equals(CardType.valueOf("CR"))){
                 tempTen++;
             }
-            if(!type.equals(CardType.valueOf("SSR")) ){
-                sum_Safe_fifty++;
-            }else {
+            if(type.equals(CardType.valueOf("SSR")) || type.equals(CardType.valueOf("SSR_sp"))){
                 sum_Safe_fifty = 0;
+            }else {
+                sum_Safe_fifty++;
             }
             updateSum(type);
             icon[i] = type.getIcon();
+
+            if(Constant.isTen && tempTen == 10){
+                icon[i] = R.drawable.sr2;
+                int num = mRandom.nextInt(Constant.DEFAULT_SR+Constant.DEFAULT_SP_SR);
+                if(num < Constant.DEFAULT_SP_SR) {
+                    icon[i] = R.drawable.sr1;
+                }
+                sumSR++;
+            }
+            boolean ishun = false;
+            if(!Constant.isNewHun && sum_Safe_newhun >= 100){
+                Constant.isNewHun = true;
+                ishun = true;
+                icon[0] = R.drawable.ssr1;
+                sum_Safe_fifty = 0;
+                sumSSR++;
+            }
+            if(Constant.isFifty && sum_Safe_fifty >= 50){
+                icon[i] = R.drawable.ssr2;
+                int num = mRandom.nextInt(Constant.DEFAULT_SSR+Constant.DEFAULT_SP_SSR);
+                if(num < Constant.DEFAULT_SP_SSR) {
+                    Constant.isNewHun = true;
+                    icon[i] = R.drawable.ssr1;
+                }
+                sumSR--;
+                if(!ishun)sumSSR++;
+                sum_Safe_fifty = 0;
+            }
         }
-        if(Constant.isTen && tempTen == 10){
-            icon[9] = R.drawable.sr;
-            sumSR++;
-        }
-        if(Constant.isFifty && sum_Safe_fifty > 50){
-            icon[9] = R.drawable.ssr;
-            sumSR--;
-            sumSSR++;
-            sum_Safe_fifty = 0;
-        }
-        updateSum(null);
-        gridView.setAdapter(new ImageAdapter(this,card_view,btn_solo,btn_tenfold,icon));
+
+        setResult(icon);
     }
 
     private void updateSum(CardType type){
+        int tempNum;
+        int tempNewNum;
         if(type == null){
-            int tempNum= (50-this.sum_Safe_fifty)>0? (50-this.sum_Safe_fifty):0;
+            tempNum= (50-this.sum_Safe_fifty)>0? (50-this.sum_Safe_fifty):0;
+            tempNewNum= (100-this.sum_Safe_newhun)>0? (100-this.sum_Safe_newhun):0;
             safe_fifity.setText(tempNum+"");
+            if(Constant.isNewHun) {
+                safe_newhun.setText("已获得");
+            }else {
+                safe_newhun.setText(tempNewNum+"");
+            }
             rNum.setText(" "+this.sumR+" ");
             srNum.setText(" "+this.sumSR+" ");
             ssrNum.setText(" "+this.sumSSR+" ");
             return;
         }
 
-        if(type.equals(CardType.valueOf("SSR"))){
+        if(type.equals(CardType.valueOf("SSR")) || type.equals(CardType.valueOf("SSR_sp"))){
             this.sumSSR++;
         }
-        if(type.equals(CardType.valueOf("SR"))){
+        if(type.equals(CardType.valueOf("SR")) || type.equals(CardType.valueOf("SR_sp"))){
             this.sumSR++;
         }
         if(type.equals(CardType.valueOf("CR"))){
             this.sumR++;
         }
-        int tempNum= (50-this.sum_Safe_fifty)>0? (50-this.sum_Safe_fifty):0;
+        tempNum= (50-this.sum_Safe_fifty)>0? (50-this.sum_Safe_fifty):0;
         safe_fifity.setText(tempNum+"");
+        tempNewNum= (100-this.sum_Safe_newhun)>0? (100-this.sum_Safe_newhun):0;
+        if(Constant.isNewHun) {
+            safe_newhun.setText("已获得");
+        }else {
+            safe_newhun.setText(tempNewNum+"");
+        }
         rNum.setText(" "+this.sumR+" ");
         srNum.setText(" "+this.sumSR+" ");
         ssrNum.setText(" "+this.sumSSR+" ");
@@ -230,13 +250,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_tenfold:
                 tenfoldGet();
                 break;
-            case R.id.btn_setPR:
-                setPR();
-                break;
             case R.id.clear:
                 clear();
                 break;
         }
+    }
+
+    private void setResult(Integer[] icon){
+        updateSum(null);
+        gridView.setAdapter(new ImageAdapter(this,card_view,btn_solo,btn_tenfold,icon));
     }
 
     private void clear(){
@@ -244,18 +266,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sumSR = 0;
         sumSSR = 0;
         sum_Safe_fifty = 0;
+        sum_Safe_newhun = 0;
+        Constant.isNewHun = false;
+        gridView.setAdapter(new ImageAdapter(this,card_view,btn_solo,btn_tenfold,new Integer[0]));
         updateSum(null);
-    }
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        int id = compoundButton.getId();
-        switch (id) {
-            case R.id.cb_Safe_ten:
-                Constant.isTen = cb_Safe_ten.isChecked();
-                break;
-            case R.id.cb_Safe_fifty:
-                Constant.isFifty = cb_Safe_fifty.isChecked();
-                break;
-        }
     }
 }

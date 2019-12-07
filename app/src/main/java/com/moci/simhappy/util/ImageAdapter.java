@@ -46,7 +46,7 @@ public class ImageAdapter extends BaseAdapter {
             /*实例化ImageView对象*/
             imageView = new ImageView(mContext);
             /* 设置ImageView对象布局，设置View的height和width */
-            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+            imageView.setLayoutParams(new GridView.LayoutParams(250, 250));
             /* 设置边界对齐*/
             imageView.setAdjustViewBounds(false);
             /* 按比例同意缩放图片（保持图片的尺寸比例）*/

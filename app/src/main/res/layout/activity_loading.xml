@@ -8,8 +8,8 @@
     tools:context=".LoadingActivity">
 
     <ImageView
-        android:layout_width="400dp"
-        android:layout_height="600dp"
+        android:layout_width="450dp"
+        android:layout_height="675dp"
         android:background="@drawable/loading_background"
         android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"

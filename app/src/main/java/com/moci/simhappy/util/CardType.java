@@ -6,8 +6,11 @@ public enum CardType {
 
 
     CR(R.drawable.r,R.drawable.r_img),
-    SR(R.drawable.sr,R.drawable.sr_img),
-    SSR(R.drawable.ssr,R.drawable.ssr_img);
+    SR(R.drawable.sr2,R.drawable.sr2_img),
+    SSR(R.drawable.ssr2,R.drawable.ssr2_img),
+
+    SR_sp(R.drawable.sr1,R.drawable.sr1_img),
+    SSR_sp(R.drawable.ssr1,R.drawable.ssr1_img);
 
 
 
